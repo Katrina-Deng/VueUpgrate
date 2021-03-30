@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sync</title>
+  </head>
+  <body>
+    <!-- 父组件维护course输入，修改者还是子组件 -->
+    <div id="app">
+      <h2>{{title}}</h2>
+      <course-add @add-course="addCourse" :course.sync="course"></course-add>
+      <!-- <course-add :value="course" @input="course=$event"></course-add> -->
+
+      <p>{{courses}}</p>
+    </div>
+
+    <script src="./vue.js"></script>
+    <script>
+      Vue.component("course-add", {
+        // data() {
+        //   return {
+        //     course: "",
+        //   };
+        // },
+        props: ["course"],
+        template: `
+        <div>
+          <!-- 表单输入绑定 -->
+      <input
+        :course='course'
+        @input='onInput'
+      @keydown.enter="addCourse" />
+      <!-- 事件处理 -->
+      <button v-on:click="addCourse">新增课程</button>
+      </div>
+          `,
+
+        methods: {
+          addCourse() {
+            this.$emit("add-course");
+            //this.course = "";
+          },
+          onInput(e) {
+            this.$emit("update:course", e.target.value);
+          },
+        },
+      });
+      const app = new Vue({
+        el: "#app",
+        data: {
+          title: "vue 双绑1",
+          course: "",
+          courses: "",
+        },
+        methods: {
+          addCourse() {
+            this.courses = this.course;
+            console.log("courses", this.courses);
+            console.log("course", this.course);
+            this.course = "";
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
