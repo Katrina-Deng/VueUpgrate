@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h2>{{title}}</h2>
+      <heading level="3"> {{title}} </heading>
+      <p>{{main}}</p>
+      <h2>{{footer}}</h2>
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+      Vue.component("heading", {
+        props: {
+          level: {
+            type: String,
+            default: "1",
+          },
+        },
+        // h 就是createElement
+        render(h) {
+          return h(
+            "h" + this.level,
+            // 孩子的节点的数组
+            this.$slots.default
+          );
+        },
+      });
+
+      const app = new Vue({
+        el: "#app",
+        data: {
+          title: "heading",
+          main: "这里是主要内容",
+          footer: "footer",
+        },
+      });
+    </script>
+  </body>
+</html>
